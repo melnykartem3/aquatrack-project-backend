@@ -8,3 +8,4 @@ export const signup = async (data) =>
     ...data,
     password: await hashValue(data.password),
   });
+

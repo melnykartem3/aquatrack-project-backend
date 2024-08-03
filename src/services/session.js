@@ -1,26 +1,27 @@
-import { randomBytes } from 'node:crypto';
+import { randomBytes } from "node:crypto";
+import { Session } from "../db/models/Session.js";
+import { ACCESS_TOKEN_LIFETIME, REFRESH_TOKEN_LIFETIME } from "../constants/index.js";
 
-import Session from '../db/models/Session.js';
+export const findSession = filter => Session.findOne(filter);
 
-import {
-  ACCESS_TOKEN_LIFETIME,
-  REFRESH_TOKEN_LIFETIME,
-} from '../constants/index.js';
+export const createSession = async(userId) => {
 
-export const createSession = async (userId) => {
-  await Session.findOneAndDelete({ userId });
+    await Session.deleteOne({ userId });
 
-  const accessToken = randomBytes(30).toString('base64');
-  const refreshToken = randomBytes(30).toString('base64');
+    const accessToken = randomBytes(30).toString("base64");
+    const refreshToken = randomBytes(30).toString("base64");
 
-  const accessTokenValidUntil = new Date(Date.now() + ACCESS_TOKEN_LIFETIME);
-  const refreshTokenValidUntil = new Date(Date.now() + REFRESH_TOKEN_LIFETIME);
+    const accessTokenValidUntil = new Date(Date.now() + ACCESS_TOKEN_LIFETIME);
+    const refreshTokenValidUntil =   new Date(Date.now() + REFRESH_TOKEN_LIFETIME);
 
-  return Session.create({
-    userId,
-    accessToken,
-    refreshToken,
-    accessTokenValidUntil,
-    refreshTokenValidUntil,
-  });
+    return Session.create({
+        userId,
+        accessToken,
+        refreshToken,
+        accessTokenValidUntil,
+        refreshTokenValidUntil,
+    });
 };
+
+export const deleteSession = filter => Session.deleteOne(filter);
+
