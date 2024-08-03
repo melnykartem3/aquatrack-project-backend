@@ -24,8 +24,8 @@ authRouter.get('/:userId', isValidId, validateBody(), ctrlWrapper(getUserInfCont
 
 authRouter.patch('/:userId', upload.single('photo'), isValidId, validateBody(), ctrlWrapper(updateUserController));
 
-authRouter.post('/refresh/:userId', ctrlWrapper(refreshController));
+authRouter.post('/refresh/:userId', isValidId, ctrlWrapper(refreshController));
 
-authRouter.post('/logout/:userId', ctrlWrapper(logoutController));
+authRouter.post('/logout/:userId', isValidId, ctrlWrapper(logoutController));
 
 export default authRouter;
