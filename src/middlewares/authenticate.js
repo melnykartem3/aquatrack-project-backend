@@ -14,7 +14,7 @@ export const authenticate = async (req, _, next) => {
     const [bearer, accessToken] = authHeader.split(" ");
 
     if (bearer !== "Bearer") {
-        return next(createHttpError(401, "Bearer is missing"));
+        return next(createHttpError(401, "Token must have Bearer type"));
     }
 
     if (!accessToken) {
