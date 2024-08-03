@@ -36,6 +36,11 @@ const UsersSchema = new Schema(
     avatar: {
       type: String,
     },
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
+  }
   },
   {
     versionKey: false,

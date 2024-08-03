@@ -1,7 +1,7 @@
 import createHttpError from 'http-errors';
 
 import { createSession, deleteSession, findSession } from '../services/session.js';
-import { env } from 'node:process';
+import env from '../utils/env.js';
 import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 import { saveFileToPublicDir } from '../utils/saveFileToPublicDir.js';
 import { userService } from '../services/auth.js';
@@ -10,24 +10,24 @@ export const signUpController = async (req, res) => {};
 
 export const signInController = async (req, res) => {};
 
-export const getUserInfController = async (req, res) => {
-  const { contactId } = req.params;
-  const userId = req.user._id;
-  const contact = await userService.getContactById({ _id: contactId, userId });
-  if (!contact) {
-    throw createHttpError(404, 'Contact not found');
+export const getUserController = async (req, res) => {
+  const { userId } = req.params;
+  const user = await userService.getUserById({ _id: userId });
+  if (!user) {
+    throw createHttpError(404, 'User not found');
   }
   res.status(200).json({
     status: 200,
-    message: `Contact with id=${contactId} found success`,
-    data: contact
+    message: `User with id=${userId} found success`,
+    data: user
   });
 };
+
 
 const enable_cloudinary = env("ENABLE_CLOUDINARY");
 
 export const updateUserController = async (req, res) => {
-    const { contactId } = req.params;
+    const { id } = req.params;
     const userId = req.user._id;
     let photo = "";
   
@@ -39,14 +39,14 @@ export const updateUserController = async (req, res) => {
       }
     };
   
-    const updatedContact = await userService.updateUser({ _id: contactId, userId }, { ...req.body, photo });
-    if (!updatedContact) {
-      throw createHttpError(404, 'Contact not found');
+    const updatedUser = await userService.updateUser({ _id: id, userId }, { ...req.body, photo });
+    if (!updatedUser) {
+      throw createHttpError(404, 'User not found');
     }
     res.status(200).json({
       status: 200,
-      message: 'Successfully patched a contact!',
-      data: updatedContact,
+      message: 'Successfully patched a user!',
+      data: updatedUser,
     });
   };
 
@@ -100,3 +100,6 @@ export const logoutController = async (req, res) => {
   
     res.status(204).send();
   };
+
+
+
