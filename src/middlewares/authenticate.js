@@ -39,6 +39,5 @@ export const authenticate = async (req, _, next) => {
         return next(createHttpError(401, "user not found"));
     }
     req.user = user;
-    console.log('Authenticated user:', req.user);
     next();
 };
