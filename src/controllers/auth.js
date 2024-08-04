@@ -44,7 +44,7 @@ export const signInController = async (req, res) => {
     httpOnly: true,
     expires: refreshTokenValidUntil,
   });
-  res.cookie('id', _id, {
+  res.cookie('userId', _id, {
     httpOnly: true,
     expires: refreshTokenValidUntil,
   });
