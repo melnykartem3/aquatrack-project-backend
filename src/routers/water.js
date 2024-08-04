@@ -5,11 +5,13 @@ import validateBody from '../utils/validateBody.js';
 import { authenticate } from '../middlewares/authenticate.js';
 import { createWaterSchema, updateWaterSchema } from '../validation/water.js';
 import { isValidId } from '../middlewares/isValidId.js';
+import { createNewWaterController } from '../controllers/water.js';
+
 const waterRouter = Router();
 
 waterRouter.use(authenticate);
 
-waterRouter.post('/', validateBody(createWaterSchema), ctrlWrapper());
+waterRouter.post('/', validateBody(createWaterSchema), ctrlWrapper(createNewWaterController));
 
 waterRouter.put('/:userId', validateBody(updateWaterSchema), isValidId, ctrlWrapper());
 
