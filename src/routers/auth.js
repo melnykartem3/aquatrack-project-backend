@@ -13,17 +13,9 @@ import userSchema from '../validation/user.js';
 
 const authRouter = Router();
 
-authRouter.post(
-  '/signup',
-  validateBody(userSchema),
-  ctrlWrapper(signUpController),
-);
+authRouter.post('/signup', validateBody(userSchema), ctrlWrapper(signUpController));
 
-authRouter.post(
-  '/signin',
-  validateBody(userSchema),
-  ctrlWrapper(signInController),
-);
+authRouter.post('/signin', validateBody(userSchema), ctrlWrapper(signInController));
 
 authRouter.get('/:id', validateBody(), ctrlWrapper());
 

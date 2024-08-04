@@ -1,4 +1,4 @@
-import { WaterCollection } from "../db/models/Water.js";
+import  WaterCollection  from "../db/models/Water.js";
 
 // export const getWaterById = (waterId)=> WaterCollection.findById(waterId);
 
