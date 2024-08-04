@@ -14,8 +14,6 @@ import upload from '../middlewares/multer.js';
 import { isValidId } from '../validation/isValidId.js';
 import userSchema from '../validation/user.js';
 
-import userSchema from '../validation/user.js';
-
 const authRouter = Router();
 
 authRouter.post(
@@ -30,10 +28,15 @@ authRouter.post(
   ctrlWrapper(signInController),
 );
 
-
 authRouter.get('/:userId', isValidId, ctrlWrapper(getUserController));
 
-authRouter.patch('/update/:userId', upload.single('photo'), isValidId, validateBody(userSchema), ctrlWrapper(updateUserController));
+authRouter.patch(
+  '/update/:userId',
+  upload.single('photo'),
+  isValidId,
+  validateBody(userSchema),
+  ctrlWrapper(updateUserController),
+);
 
 authRouter.post('/refresh/:userId', isValidId, ctrlWrapper(refreshController));
 
