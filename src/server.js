@@ -7,7 +7,6 @@ import env from './utils/env.js';
 
 import authRouter from './routers/auth.js';
 import waterRouter from './routers/water.js';
-import { authenticate } from './middlewares/authenticate.js';
 import notFoundHandler from './middlewares/notFoundHandler.js';
 import errorHandler from './middlewares/errorHandler.js';
 
@@ -29,7 +28,7 @@ const setupServer = () => {
   app.use(cookieParser());
   app.use(express.json());
 
-  app.use('/auth', authenticate, authRouter);
+  app.use('/auth', authRouter);
   app.use('/water', waterRouter);
 
   app.use(notFoundHandler);

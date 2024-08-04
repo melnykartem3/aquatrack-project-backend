@@ -13,6 +13,7 @@ import {
 import upload from '../middlewares/multer.js';
 import { isValidId } from '../validation/isValidId.js';
 import userSchema from '../validation/user.js';
+import { authenticate } from '../middlewares/authenticate.js';
 
 const authRouter = Router();
 
@@ -25,6 +26,7 @@ authRouter.post(
 authRouter.post(
   '/signin',
   validateBody(userSchema),
+  authenticate,
   ctrlWrapper(signInController),
 );
 
