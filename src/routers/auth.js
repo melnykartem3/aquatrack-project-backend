@@ -3,11 +3,16 @@ import { Router } from 'express';
 import ctrlWrapper from '../utils/ctrlWrapper.js';
 import validateBody from '../utils/validateBody.js';
 import {
+  getUserController,
   logoutController,
   refreshController,
   signInController,
   signUpController,
+  updateUserController,
 } from '../controllers/auth.js';
+import upload from '../middlewares/multer.js';
+import { isValidId } from '../validation/isValidId.js';
+import userSchema from '../validation/user.js';
 
 import userSchema from '../validation/user.js';
 
@@ -25,10 +30,13 @@ authRouter.post(
   ctrlWrapper(signInController),
 );
 
-authRouter.get('/:id', validateBody(), ctrlWrapper());
 
-authRouter.post('/refresh', validateBody(), ctrlWrapper(refreshController));
+authRouter.get('/:userId', isValidId, ctrlWrapper(getUserController));
 
-authRouter.post('/logout', validateBody(), ctrlWrapper(logoutController));
+authRouter.patch('/update/:userId', upload.single('photo'), isValidId, validateBody(userSchema), ctrlWrapper(updateUserController));
+
+authRouter.post('/refresh/:userId', isValidId, ctrlWrapper(refreshController));
+
+authRouter.post('/logout/:userId', isValidId, ctrlWrapper(logoutController));
 
 export default authRouter;
