@@ -16,6 +16,13 @@ const WaterSchema = new Schema({
   },
 });
 
+
+  WaterSchema.post("save", mongooseSaveError);
+
+WaterSchema.pre("findOneAndUpdate", setUpdateSettings );
+
+WaterSchema.post("findOneAndUpdate", mongooseSaveError);
+
 const WaterCollection = model('water', WaterSchema);
 
 export default WaterCollection;
