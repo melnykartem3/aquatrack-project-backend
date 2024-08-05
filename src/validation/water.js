@@ -1,8 +1,13 @@
-import joi from 'joi';
+import Joi from "joi";
 
-const waterSchema = joi.object({
-  date: joi.string().required(),
-  waterVolume: joi.string().required(),
+export const createWaterSchema = Joi.object({
+    date: Joi.string(),
+    waterVolume: Joi.string(),
+
 });
 
-export default waterSchema;
+export const updateWaterSchema = Joi.object({
+   date: Joi.string(),
+    waterVolume: Joi.string(),
+});
+

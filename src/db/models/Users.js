@@ -21,7 +21,7 @@ const UsersSchema = new Schema(
       required: true,
     },
     weight: {
-      type: String,
+      type: Number,
     },
     timeSports: {
       type: String,

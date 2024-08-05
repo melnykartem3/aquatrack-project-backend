@@ -1,4 +1,10 @@
-import WaterCollection from '../db/models/Water.js';
+import  WaterCollection  from "../db/models/Water.js";
+
+// export const getWaterById = (waterId)=> WaterCollection.findById(waterId);
+
+export const createWater = (data) => WaterCollection.create(data);
+
+// export const deleteWater = (filter) => WaterCollection.findOneAndDelete(filter);
 
 export const deleteWaterIdService = async (id) => {
     const waterData = await WaterCollection.findByIdAndDelete(id);
@@ -62,3 +68,4 @@ export const getPerMonth = async (userId, month) => {
     },
   ]);
 };
+
