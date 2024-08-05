@@ -1,5 +1,20 @@
 import WaterCollection from '../db/models/Water.js';
 
+export const deleteWaterIdService = async (id) => {
+    const waterData = await WaterCollection.findByIdAndDelete(id);
+    return waterData;
+  };
+
+
+ export const updateWaterIdService = async (id, waterData) => {
+           const updatedRecord = await WaterCollection.findByIdAndUpdate(
+      id,
+      { ...waterData, localDate: ""},
+      { new: true },
+    );
+    return updatedRecord;
+  };
+
 export const getPerDay = async (userId, date) => {
   return WaterCollection.aggregate([
     {

@@ -1,4 +1,8 @@
 import { Router } from 'express';
+import {
+  deleteWaterController,
+  updateWaterController,
+} from '../controllers/water.js';
 
 import ctrlWrapper from '../utils/ctrlWrapper.js';
 import validateBody from '../utils/validateBody.js';
@@ -16,11 +20,11 @@ waterRouter.use(authenticate);
 
 waterRouter.post('/', validateBody(), ctrlWrapper());
 
-waterRouter.put('/:userId', validateBody(), ctrlWrapper());
+waterRouter.put('/:waterId', validateBody(), ctrlWrapper());
 
-waterRouter.patch('/:userId', validateBody(), ctrlWrapper());
+waterRouter.patch('/:waterId', ctrlWrapper(updateWaterController));
 
-waterRouter.delete('/:userId', validateBody(), ctrlWrapper());
+waterRouter.delete('/:waterId', ctrlWrapper(deleteWaterController));
 
 waterRouter.get('/perDay', ctrlWrapper(getWaterPerDayController));
 
