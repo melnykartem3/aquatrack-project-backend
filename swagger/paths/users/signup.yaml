@@ -1,0 +1,72 @@
+tags:
+  - Auth
+summary:  Register a user
+operationId: signupUser
+description: 'Add a user'
+security:
+  - bearerAuth: []
+requestBody:
+  content:
+    multipart/form-data:
+      schema:
+        type: object
+        required:
+          - name
+          - email
+          - password
+        properties:
+          name:
+            description: "User's name"
+            type: string
+            example: 'John Doe'
+            default: "User"
+          password:
+            description: "Hashed user's password"
+            type: string
+            example: $2b$10$v.fenpNLVl2nfbHGoU504edTH6dsljkjhSk7BrtE7mdbrBeWZdP0W
+          weight:
+            description: "User's weight in kilograms"
+            type: number
+            example: 65
+          timeSports:
+            description: "How much the user does sports"
+            type: number
+            example: 4
+          waterRate:
+            description: "How much user drinks water"
+            type: number
+            example: 2
+          gender:
+            description: "User's gender"
+            type: string
+            enum: ["woman","man"]
+            default: "man"
+          avatar:
+            description: "User's photo"
+            type: string
+            example: <https://res.cloudinary.com/fvnje/image/upload/image.png>
+responses:
+  '201':
+    description: 'Successfully registered a user!'
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 201
+            message:
+              type: string
+              example: Successfully registered a user!
+            data:
+              type: object
+              $ref: ../../components/schemas/user.yaml
+  '404':
+    $ref: ../../components/responses/404.yaml
+  '409':
+    $ref: ../../components/responses/409.yaml

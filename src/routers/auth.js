@@ -31,8 +31,8 @@ authRouter.patch(
   ctrlWrapper(updateUserController),
 );
 
-authRouter.post('/refresh/:userId', isValidId, ctrlWrapper(refreshController));
+authRouter.post('/refresh', ctrlWrapper(refreshController));
 
-authRouter.post('/logout/:userId', isValidId, ctrlWrapper(logoutController));
+authRouter.post('/logout', ctrlWrapper(logoutController));
 
 export default authRouter;
