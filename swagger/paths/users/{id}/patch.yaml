@@ -1,0 +1,79 @@
+tags:
+  - Auth
+summary:  Patch user
+operationId: upsetUser
+description: 'Patch user by id'
+security:
+  - bearerAuth: []
+parameters:
+  - in: path
+    name: userId
+    required: true
+    schema:
+      type: string
+      example: '65ca67e7ae7f10c88b598384'
+requestBody:
+  content:
+    multipart/from-data:
+      schema:
+        type: object
+        required:
+          - email
+          - password
+        properties:
+          name:
+            description: "User's name"
+            type: string
+            example: 'John Doe'
+            default: "User"
+          password:
+            description: "Hashed user's password"
+            type: string
+            example: $2b$10$v.fenpNLVl2nfbHGoU504edTH6dsljkjhSk7BrtE7mdbrBeWZdP0W
+          weight:
+            description: "User's weight in kilograms"
+            type: number
+            example: 65
+          timeSports:
+            description: "How much the user does sports"
+            type: number
+            example: 4
+          waterRate:
+            description: "How much user drinks water"
+            type: number
+            example: 2
+          gender:
+            description: "User's gender"
+            type: string
+            enum: ["woman","man"]
+            default: "man"
+          avatar:
+            description: "User's photo"
+            type: string
+            example: <https://res.cloudinary.com/fvnje/image/upload/image.png>
+responses:
+  '200':
+    description: 'Update user by id'
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Sucsessfuly update a contact
+            data:
+              type: object
+              $ref: ../../../components/schemas/user.yaml
+  '401':
+    $ref: '../../../components/responses/401.yaml'
+  '404':
+    $ref: "../../../components/responses/404.yaml"
+

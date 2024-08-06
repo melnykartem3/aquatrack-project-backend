@@ -9,6 +9,8 @@ import authRouter from './routers/auth.js';
 import waterRouter from './routers/water.js';
 import notFoundHandler from './middlewares/notFoundHandler.js';
 import errorHandler from './middlewares/errorHandler.js';
+import { swaggerDocs } from './middlewares/swaggerDocs.js';
+import { PUBLIC_DIR } from './constants/index.js';
 
 const port = env('PORT', '3001');
 
@@ -20,6 +22,8 @@ const setupServer = () => {
   });
 
   const app = express();
+  app.use('/uploads', express.static(PUBLIC_DIR));
+  app.use('/api-docs', swaggerDocs());
 
   const corsOptions = { origin: 'http://localhost:5173', credentials: true };
   app.use(cors(corsOptions));

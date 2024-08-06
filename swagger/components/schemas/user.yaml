@@ -1,0 +1,46 @@
+type: object
+required:
+  - _id
+  - name
+  - email
+  - password
+  - weight
+  - timeSports
+  - waterRate
+  - gender
+  - avatar
+properties:
+  _id:
+    description: "User's id"
+    type: string
+    example: 65e4decdd286b30065d54af9
+  name:
+    description: "User's name"
+    type: string
+    example: 'John Doe'
+    default: "User"
+  password:
+    description: "Hashed user's password"
+    type: string
+    example: $2b$10$v.fenpNLVl2nfbHGoU504edTH6dsljkjhSk7BrtE7mdbrBeWZdP0W
+  weight:
+    description: "User's weight in kilograms"
+    type: number
+    example: 65
+  timeSports:
+    description: "How much the user does sports"
+    type: number
+    example: 4
+  waterRate:
+    description: "How much user drinks water"
+    type: number
+    example: 2
+  gender:
+    description: "User's gender"
+    type: string
+    enum: ["woman","man"]
+    default: "man"
+  avatar:
+    description: "User's photo"
+    type: string
+    example: <https://res.cloudinary.com/fvnje/image/upload/image.png>

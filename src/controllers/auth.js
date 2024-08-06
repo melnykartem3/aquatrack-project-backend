@@ -81,8 +81,7 @@ export const getUserController = async (req, res) => {
 const enable_cloudinary = env('ENABLE_CLOUDINARY');
 
 export const updateUserController = async (req, res) => {
-  const { id } = req.params;
-  const userId = req.user._id;
+  const { userId } = req.params;
   let photo = '';
 
   if (req.file) {
@@ -94,7 +93,7 @@ export const updateUserController = async (req, res) => {
   }
 
   const updatedUser = await userService.updateUser(
-    { _id: id, userId },
+    { _id: userId},
     { ...req.body, photo },
   );
   if (!updatedUser) {
@@ -130,8 +129,9 @@ export const refreshController = async (req, res) => {
   if (!currentSession) {
     throw createHttpError(401, 'Session not found');
   }
-  const refreshTokenExpired =
-    new Date() > new Date(currentSession.refreshTokenValidUntil);
+
+  const refreshTokenExpired = new Date() > new Date(currentSession.refreshTokenValidUntil);
+
   if (refreshTokenExpired) {
     throw createHttpError(401, 'Session expired');
   }
