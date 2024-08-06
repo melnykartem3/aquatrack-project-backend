@@ -1,5 +1,4 @@
-
-import UsersCollection from "../db/models/Users.js";
+import UsersCollection from '../db/models/Users.js';
 import { hashValue } from '../utils/hash.js';
 
 export const findUser = (filter) => UsersCollection.findOne(filter);
@@ -10,12 +9,18 @@ export const userService = {
   },
   getUserById: (filter) => {
     return UsersCollection.findOne(filter);
-  }
+  },
 };
 
-export const signup = async (data) =>
-  UsersCollection.create({
+export const signup = async (data) => {
+  const { password } = data;
+
+  const hashedPassword = await hashValue(password);
+
+  const newUser = await UsersCollection.create({
     ...data,
-    password: await hashValue(data.password),
+    password: hashedPassword,
   });
 
+  return newUser;
+};

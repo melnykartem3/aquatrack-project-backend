@@ -14,7 +14,7 @@ import { signup, findUser } from '../services/auth.js';
 import { compareValue } from '../utils/hash.js';
 
 export const signUpController = async (req, res) => {
-  const email = req.body.email;
+  const { email } = req.body;
   const user = await findUser({ email });
   if (user) {
     throw createHttpError(409, 'This email already in use');
@@ -51,7 +51,7 @@ export const signInController = async (req, res) => {
     httpOnly: true,
     expires: refreshTokenValidUntil,
   });
-  res.cookie('userId', _id, {
+  res.cookie('sessionId', _id, {
     httpOnly: true,
     expires: refreshTokenValidUntil,
   });
