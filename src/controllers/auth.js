@@ -55,6 +55,7 @@ export const signInController = async (req, res) => {
     httpOnly: true,
     expires: refreshTokenValidUntil,
   });
+  res.clearCookie('userId');
 
   res.json({
     status: 200,
