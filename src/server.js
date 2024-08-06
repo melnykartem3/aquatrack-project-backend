@@ -27,7 +27,7 @@ const setupServer = () => {
 
   const allowedOrigins = [
     'http://localhost:5173',
-    'https://aquatrack-project-backend.onrender.com',
+    'https://aquatrack-project-frontend.vercel.app',
   ];
 
   const corsOptions = {
