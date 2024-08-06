@@ -25,7 +25,12 @@ const setupServer = () => {
   app.use('/uploads', express.static(PUBLIC_DIR));
   app.use('/api-docs', swaggerDocs());
 
-  const corsOptions = { origin: 'http://localhost:5173', credentials: true };
+  const allowedOrigins = [
+    'http://localhost:5173',
+    'https://aquatrack-project-backend.onrender.com',
+  ];
+
+  const corsOptions = { origin: allowedOrigins, credentials: true };
   app.use(cors(corsOptions));
 
   app.use(logger);
