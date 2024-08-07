@@ -93,7 +93,7 @@ export const updateUserController = async (req, res) => {
   }
 
   const updatedUser = await userService.updateUser(
-    { _id: userId},
+    { _id: userId },
     { ...req.body, photo },
   );
   if (!updatedUser) {
@@ -130,7 +130,8 @@ export const refreshController = async (req, res) => {
     throw createHttpError(401, 'Session not found');
   }
 
-  const refreshTokenExpired = new Date() > new Date(currentSession.refreshTokenValidUntil);
+  const refreshTokenExpired =
+    new Date() > new Date(currentSession.refreshTokenValidUntil);
 
   if (refreshTokenExpired) {
     throw createHttpError(401, 'Session expired');
@@ -149,8 +150,11 @@ export const refreshController = async (req, res) => {
 
 export const logoutController = async (req, res) => {
   const { sessionId } = req.cookies;
+  console.log('sessionId from cookies:', sessionId);
+
   if (!sessionId) {
-    throw createHttpError(401, 'Session not found');
+    console.log('No sessionId found in cookies');
+    return res.status(401).json({ message: 'Session not found' });
   }
 
   await deleteSession({ _id: sessionId });
