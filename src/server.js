@@ -25,13 +25,12 @@ const setupServer = () => {
   app.use('/uploads', express.static(PUBLIC_DIR));
   app.use('/api-docs', swaggerDocs());
 
-  const allowedOrigins = [
-    'http://localhost:5173',
-    'https://aquatrack-project-frontend.vercel.app',
-  ];
-
   const corsOptions = {
     origin: (origin, callback) => {
+      const allowedOrigins = [
+        'http://localhost:5173',
+        'https://aquatrack-project-frontend.vercel.app',
+      ];
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
