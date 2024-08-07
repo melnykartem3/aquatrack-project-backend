@@ -23,33 +23,32 @@ export const createNewWaterController = async (req, res, next) => {
 };
 
 export const deleteWaterController = async (req, res, next) => {
-  try {
-    const waterRecord = await deleteWaterIdService(req.water.id);
-
-    res.status(200).json({
-      msg: 'DELETED!',
-      waterRecord: {
-        _id: waterRecord.id,
-      },
-    });
-  } catch (error) {
-    next(error);
+  const userId = req.user._id; 
+  const  waterId  = req.params.waterId;
+  const waterRecord = await deleteWaterIdService(waterId, userId);
+  if (!waterRecord) {
+        throw createHttpError(404, 'Record not found');
   }
+  res.status(204).send(); 
 };
 
-export const updateWaterController = async (req, res, next) => {
-  try {
-    const waterRecord = await updateWaterIdService(req.water.id, { ...req.body, localDate: "" });
-
-    res.status(200).json({
-      msg: 'UPDATED!',
-      waterRecord: {
-        _id: waterRecord.id,
-      },
-    });
-  } catch (error) {
-    next(error);
+ export const updateWaterController = async (req, res, next) => { 
+  try { 
+    const userId = req.user._id; 
+    const  waterId  = req.params.waterId; 
+    const data = await updateWaterIdService(userId, waterId, req.body); 
+    if (!data) {
+        next(createHttpError(404, 'Record not found'));
+        return;
   }
+    res.status(201).json({ 
+      status: 201, 
+      message: "The drunk part of the water has been successfully edit!", 
+      data, 
+    }); 
+  } catch (error) { 
+    next(error); 
+  } 
 };
 
 export const getWaterPerDayController = async (req, res, next) => {

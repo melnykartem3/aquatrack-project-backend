@@ -6,19 +6,19 @@ export const createWater = (data) => WaterCollection.create(data);
 
 // export const deleteWater = (filter) => WaterCollection.findOneAndDelete(filter);
 
-export const deleteWaterIdService = async (id) => {
-    const waterData = await WaterCollection.findByIdAndDelete(id);
+export const deleteWaterIdService = async (waterId, userId) => {
+    const waterData = await WaterCollection.findByIdAndDelete({_id: waterId, userId });
     return waterData;
   };
 
 
- export const updateWaterIdService = async (id, waterData) => {
-           const updatedRecord = await WaterCollection.findByIdAndUpdate(
-      id,
-      { ...waterData, localDate: ""},
-      { new: true },
-    );
-    return updatedRecord;
+  export const updateWaterIdService = async (userId, waterId, payload, options = {}) => { 
+          const waterData = await WaterCollection.findOneAndUpdate( 
+    { userId, _id: waterId }, 
+    payload, 
+    { new: true, ...options }, 
+  ); 
+  return waterData; 
   };
 
 export const getPerDay = async (userId, date) => {
