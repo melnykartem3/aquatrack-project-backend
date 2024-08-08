@@ -59,7 +59,7 @@ export const signInController = async (req, res) => {
     sameSite: 'None',
     expires: refreshTokenValidUntil,
   });
-
+  res.clearCookie('cookieName');
   res.json({
     status: 200,
     message: 'Successfully logged in!',

@@ -2,6 +2,7 @@ import express from 'express';
 import pino from 'pino-http';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+
 import env from './utils/env.js';
 
 import authRouter from './routers/auth.js';
@@ -9,7 +10,7 @@ import waterRouter from './routers/water.js';
 import notFoundHandler from './middlewares/notFoundHandler.js';
 import errorHandler from './middlewares/errorHandler.js';
 
-const port = env('PORT', '3001');
+const port = env('PORT', '3000');
 
 const setupServer = () => {
   const logger = pino({
