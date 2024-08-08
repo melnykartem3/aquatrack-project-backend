@@ -34,7 +34,7 @@ const setupServer = () => {
   app.use(express.json());
 
   app.use('/auth', authRouter);
-  app.use('/contacts', waterRouter);
+  app.use('/water', waterRouter);
 
   app.use(notFoundHandler);
   app.use(errorHandler);
