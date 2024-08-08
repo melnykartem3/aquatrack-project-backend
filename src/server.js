@@ -28,21 +28,10 @@ const setupServer = () => {
 
   const corsOptions = { origin: allowedOrigins, credentials: true };
 
-  const cookieOptions = {
-    httpOnly: true,
-    secure: true,
-    sameSite: 'none',
-  };
-
   app.use(cors(corsOptions));
   app.use(logger);
   app.use(cookieParser());
   app.use(express.json());
-
-  app.use((req, res, next) => {
-    res.cookie('cookieName', 'cookieValue', cookieOptions);
-    next();
-  });
 
   app.use('/auth', authRouter);
   app.use('/water', waterRouter);
