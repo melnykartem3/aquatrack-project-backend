@@ -32,7 +32,7 @@ properties:
     type: number
     example: 4
   waterRate:
-    description: "How much user drinks water"
+    description: "User's goal to drink water"
     type: number
     example: 2
   gender:

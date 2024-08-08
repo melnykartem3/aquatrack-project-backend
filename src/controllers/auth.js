@@ -44,8 +44,7 @@ export const signInController = async (req, res) => {
     throw createHttpError(401, 'Wrong password');
   }
 
-  const { accessToken, refreshToken, _id, refreshTokenValidUntil } =
-    await createSession(user._id);
+  const { accessToken, refreshToken, _id, refreshTokenValidUntil } = await createSession(user._id);
 
   res.cookie('refreshToken', refreshToken, {
     httpOnly: true,
@@ -73,15 +72,14 @@ export const signInController = async (req, res) => {
 };
 
 export const getUserController = async (req, res) => {
-  const { userId } = req.params;
-  const user = await userService.getUserById({ _id: userId });
-  if (!user) {
-    throw createHttpError(404, 'User not found');
-  }
+  const user = req.user;
+
   res.status(200).json({
     status: 200,
-    message: `User with id=${userId} found success`,
-    data: user,
+    message: `Successfully found user`,
+    data: {
+      user
+    },
   });
 };
 
@@ -103,6 +101,7 @@ export const updateUserController = async (req, res) => {
     { _id: userId },
     { ...req.body, photo },
   );
+
   if (!updatedUser) {
     throw createHttpError(404, 'User not found');
   }
@@ -113,10 +112,7 @@ export const updateUserController = async (req, res) => {
   });
 };
 
-const setupResponseSession = (
-  res,
-  { refreshToken, refreshTokenValidUntil, _id },
-) => {
+const setupResponseSession = (res,{refreshToken, refreshTokenValidUntil, _id },) => {
   res.cookie('refreshToken', refreshToken, {
     httpOnly: true,
     expires: refreshTokenValidUntil,
@@ -144,6 +140,7 @@ export const refreshController = async (req, res) => {
     throw createHttpError(401, 'Session expired');
   }
   const newSession = await createSession(currentSession.userId);
+  console.log(newSession);
 
   setupResponseSession(res, newSession);
   res.json({

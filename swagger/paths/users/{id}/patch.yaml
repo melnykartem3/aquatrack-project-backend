@@ -1,7 +1,7 @@
 tags:
   - Auth
 summary:  Patch user
-operationId: upsetUser
+operationId: upsertUser
 description: 'Patch user by id'
 security:
   - bearerAuth: []
@@ -19,17 +19,12 @@ requestBody:
         type: object
         required:
           - email
-          - password
         properties:
           name:
             description: "User's name"
             type: string
             example: 'John Doe'
             default: "User"
-          password:
-            description: "Hashed user's password"
-            type: string
-            example: $2b$10$v.fenpNLVl2nfbHGoU504edTH6dsljkjhSk7BrtE7mdbrBeWZdP0W
           weight:
             description: "User's weight in kilograms"
             type: number
@@ -76,4 +71,6 @@ responses:
     $ref: '../../../components/responses/401.yaml'
   '404':
     $ref: "../../../components/responses/404.yaml"
+  '500':
+    $ref: ../../../components/responses/500.yaml
 

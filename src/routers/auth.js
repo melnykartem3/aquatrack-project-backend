@@ -21,7 +21,7 @@ authRouter.post('/signup', validateBody(userSchema), ctrlWrapper(signUpControlle
 
 authRouter.post('/signin', validateBody(userSchema), ctrlWrapper(signInController));
 
-authRouter.get('/:userId', isValidId, ctrlWrapper(getUserController));
+authRouter.get('/current', authenticate, ctrlWrapper(getUserController));
 
 authRouter.patch(
   '/update/:userId',

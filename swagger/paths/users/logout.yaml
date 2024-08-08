@@ -2,7 +2,7 @@ tags:
   - Auth
 summary: logout user
 operationId: logout
-description: logout user
+description: Abort current user session
 security:
   - bearerAuth: []
 parameters:
@@ -17,3 +17,5 @@ responses:
     description: 'No content'
   '404':
     $ref: ../../components/responses/404.yaml
+  '500':
+    $ref: ../../components/responses/500.yaml
