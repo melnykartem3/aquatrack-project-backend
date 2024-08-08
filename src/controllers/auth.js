@@ -47,12 +47,16 @@ export const signInController = async (req, res) => {
   const { accessToken, refreshToken, _id, refreshTokenValidUntil } =
     await createSession(user._id);
 
+  res.cookies({ sameSite: 'None' });
+
   res.cookie('refreshToken', refreshToken, {
     httpOnly: true,
+    sameSite: 'None',
     expires: refreshTokenValidUntil,
   });
   res.cookie('sessionId', _id, {
     httpOnly: true,
+    sameSite: 'None',
     expires: refreshTokenValidUntil,
   });
 
