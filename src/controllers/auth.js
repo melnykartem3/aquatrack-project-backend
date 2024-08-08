@@ -51,11 +51,13 @@ export const signInController = async (req, res) => {
 
   res.cookie('refreshToken', refreshToken, {
     httpOnly: true,
+    secure: true,
     sameSite: 'None',
     expires: refreshTokenValidUntil,
   });
   res.cookie('sessionId', _id, {
     httpOnly: true,
+    secure: true,
     sameSite: 'None',
     expires: refreshTokenValidUntil,
   });
