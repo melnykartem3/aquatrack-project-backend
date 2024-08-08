@@ -1,4 +1,5 @@
-import  WaterCollection  from "../db/models/Water.js";
+import WaterCollection from '../db/models/Water.js';
+import mongoose from 'mongoose';
 
 // export const getWaterById = (waterId)=> WaterCollection.findById(waterId);
 
@@ -7,31 +8,31 @@ export const createWater = (data) => WaterCollection.create(data);
 // export const deleteWater = (filter) => WaterCollection.findOneAndDelete(filter);
 
 export const deleteWaterIdService = async (id) => {
-    const waterData = await WaterCollection.findByIdAndDelete(id);
-    return waterData;
-  };
+  const waterData = await WaterCollection.findByIdAndDelete(id);
+  return waterData;
+};
 
-
- export const updateWaterIdService = async (id, waterData) => {
-           const updatedRecord = await WaterCollection.findByIdAndUpdate(
-      id,
-      { ...waterData, localDate: ""},
-      { new: true },
-    );
-    return updatedRecord;
-  };
+export const updateWaterIdService = async (id, waterData) => {
+  const updatedRecord = await WaterCollection.findByIdAndUpdate(
+    id,
+    { ...waterData, localDate: '' },
+    { new: true },
+  );
+  return updatedRecord;
+};
 
 export const getPerDay = async (userId, date) => {
-  return WaterCollection.aggregate([
+  const startDate = `${date}T00:00:00.000Z`;
+  const endDate = `${date}T23:59:59.999Z`;
+
+  return await WaterCollection.aggregate([
     {
       $match: {
-        userId,
-        date,
-      },
-    },
-    {
-      $addFields: {
-        waterVolume: { $toDouble: '$waterVolume' },
+        userId: new mongoose.Types.ObjectId(userId),
+        date: {
+          $gte: startDate,
+          $lt: endDate,
+        },
       },
     },
     {
@@ -39,33 +40,54 @@ export const getPerDay = async (userId, date) => {
         _id: 0,
         date: 1,
         waterVolume: 1,
+      },
+    },
+    {
+      $sort: {
+        date: 1,
       },
     },
   ]);
 };
 
 export const getPerMonth = async (userId, month) => {
-  return WaterCollection.aggregate([
+  const startDateStr = `${month}-01T00:00:00.000Z`;
+  const endDateStr = new Date(
+    new Date(startDateStr).setMonth(new Date(startDateStr).getMonth() + 1),
+  ).toISOString();
+
+  return await WaterCollection.aggregate([
     {
       $match: {
-        userId,
+        userId: new mongoose.Types.ObjectId(userId),
         date: {
-          $regex: `^${month}`,
+          $gte: startDateStr,
+          $lt: endDateStr,
         },
       },
     },
     {
       $addFields: {
-        waterVolume: { $toDouble: '$waterVolume' },
+        date: { $dateFromString: { dateString: '$date' } },
       },
+    },
+    {
+      $group: {
+        _id: {
+          day: { $dayOfMonth: '$date' },
+        },
+        totalWaterVolume: { $sum: '$waterVolume' },
+      },
+    },
+    {
+      $sort: { '_id.day': 1 },
     },
     {
       $project: {
         _id: 0,
-        date: 1,
-        waterVolume: 1,
+        day: '$_id.day',
+        totalWaterVolume: 1,
       },
     },
   ]);
 };
-
