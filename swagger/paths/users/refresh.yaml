@@ -2,7 +2,7 @@ tags:
   - Auth
 summary:  refresh user session
 operationId: refreshUser
-description: 'refresh user session'
+description: 'returns new session'
 security:
   - bearerAuth: []
 parameters:
@@ -47,4 +47,5 @@ responses:
                   example: wWfrg/qp7c/CqF6+9KZt2LgZXab/Gw9Z7yCTV/vW
   '401':
     $ref: ../../components/responses/401.yaml
-
+  '500':
+    $ref: ../../components/responses/500.yaml
