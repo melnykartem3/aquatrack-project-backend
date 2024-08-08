@@ -134,6 +134,7 @@ export const refreshController = async (req, res) => {
     throw createHttpError(401, 'Session expired');
   }
   const newSession = await createSession(currentSession.userId);
+  console.log(newSession);
 
   setupResponseSession(res, newSession);
   res.json({
