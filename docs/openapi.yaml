@@ -20,7 +20,7 @@ paths:
   /auth/signin:
     post:
       $ref: ../swagger/paths/users/signin.yaml
-  /auth/{userId}:
+  /auth/current:
     get:
       $ref: ../swagger/paths/users/{id}/get.yaml
   /auth/update/{userId}:
