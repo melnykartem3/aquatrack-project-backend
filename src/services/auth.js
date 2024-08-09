@@ -24,3 +24,5 @@ export const signup = async (data) => {
 
   return newUser;
 };
+
+export const findAllUsers = () => UsersCollection.find();
