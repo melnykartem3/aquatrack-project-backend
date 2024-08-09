@@ -9,6 +9,7 @@ import {
   signInController,
   signUpController,
   updateUserController,
+  findAllUsersController,
 } from '../controllers/auth.js';
 import upload from '../middlewares/multer.js';
 import { isValidId } from '../validation/isValidId.js';
@@ -17,9 +18,17 @@ import { authenticate } from '../middlewares/authenticate.js';
 
 const authRouter = Router();
 
-authRouter.post('/signup', validateBody(userSchema), ctrlWrapper(signUpController));
+authRouter.post(
+  '/signup',
+  validateBody(userSchema),
+  ctrlWrapper(signUpController),
+);
 
-authRouter.post('/signin', validateBody(userSchema), ctrlWrapper(signInController));
+authRouter.post(
+  '/signin',
+  validateBody(userSchema),
+  ctrlWrapper(signInController),
+);
 
 authRouter.get('/current', authenticate, ctrlWrapper(getUserController));
 
@@ -34,5 +43,7 @@ authRouter.patch(
 authRouter.post('/refresh', ctrlWrapper(refreshController));
 
 authRouter.post('/logout', ctrlWrapper(logoutController));
+
+authRouter.get('/users', ctrlWrapper(findAllUsersController));
 
 export default authRouter;

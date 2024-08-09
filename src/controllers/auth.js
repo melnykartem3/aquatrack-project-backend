@@ -10,7 +10,7 @@ import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 import { saveFileToPublicDir } from '../utils/saveFileToPublicDir.js';
 import { userService } from '../services/auth.js';
 
-import { signup, findUser } from '../services/auth.js';
+import { signup, findUser, findAllUsers } from '../services/auth.js';
 import { compareValue } from '../utils/hash.js';
 
 export const signUpController = async (req, res) => {
@@ -175,4 +175,16 @@ export const logoutController = async (req, res) => {
   res.clearCookie('refreshToken');
 
   res.status(204).send();
+};
+
+export const findAllUsersController = async (req, res) => {
+  const users = await findAllUsers();
+
+  const userCount = users.length === 0 ? 10 : users.length;
+
+  res.status(200).json({
+    status: 200,
+    message: 'Successfully found number of users',
+    data: userCount,
+  });
 };
