@@ -15,6 +15,7 @@ import {
   findUser,
   requestResetToken,
   resetPassword,
+  findAllUsers,
 } from '../services/auth.js';
 import { compareValue } from '../utils/hash.js';
 
@@ -196,6 +197,9 @@ export const resetPasswordController = async (req, res) => {
     message: 'Password was successfully reset!',
     status: 200,
     data: {},
+  });
+};
+
 export const findAllUsersController = async (req, res) => {
   const users = await findAllUsers();
 
