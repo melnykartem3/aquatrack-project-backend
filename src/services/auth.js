@@ -35,7 +35,6 @@ export const signup = async (data) => {
 
   return newUser;
 };
-///============================================//////////////
 
 export const requestResetToken = async (email) => {
   const user = await UsersCollection.findOne({ email });
@@ -102,3 +101,6 @@ export const resetPassword = async (payload) => {
     { password: encryptedPassword },
   );
 };
+
+export const findAllUsers = () => UsersCollection.find();
+

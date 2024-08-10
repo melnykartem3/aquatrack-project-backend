@@ -11,6 +11,7 @@ import {
   updateUserController,
   requestResetEmailController,
   resetPasswordController,
+  findAllUsersController,
 } from '../controllers/auth.js';
 import upload from '../middlewares/multer.js';
 import { isValidId } from '../validation/isValidId.js';
@@ -49,7 +50,6 @@ authRouter.post('/refresh', ctrlWrapper(refreshController));
 
 authRouter.post('/logout', ctrlWrapper(logoutController));
 
-///=======
 authRouter.post(
   '/request-reset-email',
   validateBody(requestResetEmailSchema),
@@ -61,5 +61,8 @@ authRouter.post(
   validateBody(resetPasswordSchema),
   ctrlWrapper(resetPasswordController),
 );
+
+authRouter.get('/users', ctrlWrapper(findAllUsersController));
+
 
 export default authRouter;

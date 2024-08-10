@@ -125,11 +125,15 @@ const setupResponseSession = (
   res.cookie('refreshToken', refreshToken, {
     httpOnly: true,
     expires: refreshTokenValidUntil,
+    sameSite: 'None',
+    secure: true,
   });
 
   res.cookie('sessionId', _id, {
     httpOnly: true,
     expires: refreshTokenValidUntil,
+    sameSite: 'None',
+    secure: true,
   });
 };
 
@@ -178,8 +182,6 @@ export const logoutController = async (req, res) => {
   res.status(204).send();
 };
 
-//==========================
-
 export const requestResetEmailController = async (req, res) => {
   await requestResetToken(req.body.email);
   res.json({
@@ -194,5 +196,14 @@ export const resetPasswordController = async (req, res) => {
     message: 'Password was successfully reset!',
     status: 200,
     data: {},
+export const findAllUsersController = async (req, res) => {
+  const users = await findAllUsers();
+
+  const userCount = users.length === 0 ? 10 : users.length;
+
+  res.status(200).json({
+    status: 200,
+    message: 'Successfully found number of users',
+    data: userCount,
   });
 };

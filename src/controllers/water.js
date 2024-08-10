@@ -64,7 +64,11 @@ export const getWaterPerDayController = async (req, res, next) => {
 
     const data = await getPerDay(_id, day);
     if (!data || data.length === 0) {
-      throw createHttpError(404, 'No data found for the given day');
+      res.status(200).json({
+        status: 200,
+        message: 'No data found for the given day',
+        data: [],
+      });
     }
 
     const totalWaterVolume = data.reduce(
@@ -97,9 +101,9 @@ export const getWaterPerMonthController = async (req, res, next) => {
   try {
     const data = await getPerMonth(_id, month);
 
-    if (data.length === 0) {
-      res.status(404).json({
-        status: 404,
+    if (!data || data.length === 0) {
+      res.status(200).json({
+        status: 200,
         message: 'No data found for the given month',
         data: [],
       });
