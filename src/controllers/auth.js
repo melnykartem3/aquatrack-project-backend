@@ -10,7 +10,12 @@ import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 import { saveFileToPublicDir } from '../utils/saveFileToPublicDir.js';
 import { userService } from '../services/auth.js';
 
-import { signup, findUser, findAllUsers } from '../services/auth.js';
+import {
+  signup,
+  findUser,
+  requestResetToken,
+  resetPassword,
+} from '../services/auth.js';
 import { compareValue } from '../utils/hash.js';
 
 export const signUpController = async (req, res) => {
@@ -177,6 +182,20 @@ export const logoutController = async (req, res) => {
   res.status(204).send();
 };
 
+export const requestResetEmailController = async (req, res) => {
+  await requestResetToken(req.body.email);
+  res.json({
+    message: 'Reset password email was successfully sent!',
+    status: 200,
+    data: {},
+  });
+};
+export const resetPasswordController = async (req, res) => {
+  await resetPassword(req.body);
+  res.json({
+    message: 'Password was successfully reset!',
+    status: 200,
+    data: {},
 export const findAllUsersController = async (req, res) => {
   const users = await findAllUsers();
 

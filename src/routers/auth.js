@@ -9,11 +9,17 @@ import {
   signInController,
   signUpController,
   updateUserController,
+  requestResetEmailController,
+  resetPasswordController,
   findAllUsersController,
 } from '../controllers/auth.js';
 import upload from '../middlewares/multer.js';
 import { isValidId } from '../validation/isValidId.js';
-import userSchema from '../validation/user.js';
+import {
+  userSchema,
+  requestResetEmailSchema,
+  resetPasswordSchema,
+} from '../validation/user.js';
 import { authenticate } from '../middlewares/authenticate.js';
 
 const authRouter = Router();
@@ -44,6 +50,19 @@ authRouter.post('/refresh', ctrlWrapper(refreshController));
 
 authRouter.post('/logout', ctrlWrapper(logoutController));
 
+authRouter.post(
+  '/request-reset-email',
+  validateBody(requestResetEmailSchema),
+  ctrlWrapper(requestResetEmailController),
+);
+
+authRouter.post(
+  '/reset-password',
+  validateBody(resetPasswordSchema),
+  ctrlWrapper(resetPasswordController),
+);
+
 authRouter.get('/users', ctrlWrapper(findAllUsersController));
+
 
 export default authRouter;
