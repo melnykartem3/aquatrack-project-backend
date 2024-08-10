@@ -44,7 +44,7 @@ export const getPerDay = async (userId, date) => {
     },
     {
       $project: {
-        _id: 0,
+        _id: 1,
         date: 1,
         waterVolume: 1,
       },
