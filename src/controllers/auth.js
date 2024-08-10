@@ -10,7 +10,12 @@ import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 import { saveFileToPublicDir } from '../utils/saveFileToPublicDir.js';
 import { userService } from '../services/auth.js';
 
-import { signup, findUser } from '../services/auth.js';
+import {
+  signup,
+  findUser,
+  requestResetToken,
+  resetPassword,
+} from '../services/auth.js';
 import { compareValue } from '../utils/hash.js';
 
 export const signUpController = async (req, res) => {
@@ -44,7 +49,8 @@ export const signInController = async (req, res) => {
     throw createHttpError(401, 'Wrong password');
   }
 
-  const { accessToken, refreshToken, _id, refreshTokenValidUntil } = await createSession(user._id);
+  const { accessToken, refreshToken, _id, refreshTokenValidUntil } =
+    await createSession(user._id);
 
   res.cookie('refreshToken', refreshToken, {
     httpOnly: true,
@@ -78,7 +84,7 @@ export const getUserController = async (req, res) => {
     status: 200,
     message: `Successfully found user`,
     data: {
-      user
+      user,
     },
   });
 };
@@ -112,7 +118,10 @@ export const updateUserController = async (req, res) => {
   });
 };
 
-const setupResponseSession = (res,{refreshToken, refreshTokenValidUntil, _id },) => {
+const setupResponseSession = (
+  res,
+  { refreshToken, refreshTokenValidUntil, _id },
+) => {
   res.cookie('refreshToken', refreshToken, {
     httpOnly: true,
     expires: refreshTokenValidUntil,
@@ -167,4 +176,23 @@ export const logoutController = async (req, res) => {
   res.clearCookie('refreshToken');
 
   res.status(204).send();
+};
+
+//==========================
+
+export const requestResetEmailController = async (req, res) => {
+  await requestResetToken(req.body.email);
+  res.json({
+    message: 'Reset password email was successfully sent!',
+    status: 200,
+    data: {},
+  });
+};
+export const resetPasswordController = async (req, res) => {
+  await resetPassword(req.body);
+  res.json({
+    message: 'Password was successfully reset!',
+    status: 200,
+    data: {},
+  });
 };
