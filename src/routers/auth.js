@@ -19,6 +19,7 @@ import {
   userSchema,
   requestResetEmailSchema,
   resetPasswordSchema,
+  updateUserSchema,
 } from '../validation/user.js';
 import { authenticate } from '../middlewares/authenticate.js';
 
@@ -40,9 +41,9 @@ authRouter.get('/current', authenticate, ctrlWrapper(getUserController));
 
 authRouter.patch(
   '/update/:userId',
-  upload.single('photo'),
+  upload.single('avatar'),
   isValidId,
-  validateBody(userSchema),
+  validateBody(updateUserSchema),
   ctrlWrapper(updateUserController),
 );
 

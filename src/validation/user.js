@@ -5,9 +5,9 @@ const userSchema = joi.object({
   name: joi.string().default('User'),
   email: joi.string().pattern(emailRegexp).required(),
   password: joi.string().min(8).required(),
-  weight: joi.string(),
-  timeSports: joi.string(),
-  waterRate: joi.string(),
+  weight: joi.number(),
+  timeSports: joi.number(),
+  waterRate: joi.number(),
   gender: joi.string().valid(...genderTypeList),
   avatar: joi.string(),
 });
@@ -19,4 +19,14 @@ const resetPasswordSchema = joi.object({
   password: joi.string().required(),
   token: joi.string().required(),
 });
+export const updateUserSchema = joi.object({
+  name: joi.string(),
+  email: joi.string().pattern(emailRegexp),
+  weight: joi.number(),
+  timeSports: joi.number(),
+  waterRate: joi.number(),
+  gender: joi.string().valid(...genderTypeList),
+  avatar: joi.string(),
+});
+
 export { userSchema, requestResetEmailSchema, resetPasswordSchema };
