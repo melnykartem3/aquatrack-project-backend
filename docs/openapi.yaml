@@ -5,11 +5,12 @@ info:
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  description:
-    This is a documentation for the water tracking web service
+  description: This is a documentation for the water tracking web service
 tags:
   - name: Auth
     description: Auth operations.
+  - name: Water
+    description: Water operations.
 servers:
   - url: http://localhost:3001
   - url: aquatrack-project-backend.onrender.com
@@ -32,6 +33,37 @@ paths:
   /auth/refresh:
     post:
       $ref: ../swagger/paths/users/refresh.yaml
+  /auth/users:
+    get:
+      $ref: ../swagger/paths/users/getAllUsers.yaml
+  /auth/request-reset-email:
+    post:
+      $ref: ../swagger/paths/users/requestResetEmail.yaml
+  /auth/reset-password:
+    post:
+      $ref: ../swagger/paths/users/resetPassword.yaml
+  /auth/confirm-google-auth:
+    post:
+      $ref: ../swagger/paths/users/confirmGoogleAuth.yaml
+  /auth/get-oauth-url:
+    get:
+      $ref: ../swagger/paths/users/getGoogleOAuthUrl.yaml
+
+  /water:
+    post:
+      $ref: ../swagger/paths/water/createWater.yaml
+  /water/{waterId}:
+    put:
+      $ref: ../swagger/paths/water/{id}/updateWater.yaml
+    delete:
+      $ref: ../swagger/paths/water/{id}/deleteWater.yaml
+  /water/perDay:
+    get:
+      $ref: ../swagger/paths/water/getWaterPerDay.yaml
+  /water/perMonth:
+    get:
+      $ref: ../swagger/paths/water/getWaterPerMonth.yaml
+
 components:
   securitySchemes:
     bearerAuth:

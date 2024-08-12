@@ -23,7 +23,6 @@ import {
   resetPasswordSchema,
   updateUserSchema,
   userGoogleAuthCodeSchema,
-
 } from '../validation/user.js';
 import { authenticate } from '../middlewares/authenticate.js';
 
@@ -61,13 +60,12 @@ authRouter.post(
   ctrlWrapper(requestResetEmailController),
 );
 
-authRouter.get(
-  "/get-oauth-url",
-  ctrlWrapper(getGoogleOAuthUrlController));
+authRouter.get('/get-oauth-url', ctrlWrapper(getGoogleOAuthUrlController));
 authRouter.post(
-  "/confirm-google-auth",
+  '/confirm-google-auth',
   validateBody(userGoogleAuthCodeSchema),
-  ctrlWrapper(authGoogleController));
+  ctrlWrapper(authGoogleController),
+);
 
 authRouter.post(
   '/reset-password',
@@ -76,6 +74,5 @@ authRouter.post(
 );
 
 authRouter.get('/users', ctrlWrapper(findAllUsersController));
-
 
 export default authRouter;

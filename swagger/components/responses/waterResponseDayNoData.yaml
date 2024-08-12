@@ -1,0 +1,4 @@
+value:
+  status: 200
+  message: No data found for the given day
+  data: []
