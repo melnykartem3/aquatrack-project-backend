@@ -966,7 +966,7 @@
         ],
         "summary": "Get water data per day",
         "operationId": "getWaterPerDay",
-        "description": "Get water data per day with this endpoint",
+        "description": "Retrieve water data for a specific day",
         "security": [
           {
             "bearerAuth": []
@@ -979,9 +979,10 @@
             "required": true,
             "schema": {
               "type": "string",
-              "example": "610c5d71f7980a001c4d18c6"
+              "format": "date",
+              "example": "2024-08-13"
             },
-            "description": "The ID of the water record to delete"
+            "description": "The date in YYYY-MM-DD format"
           }
         ],
         "responses": {
