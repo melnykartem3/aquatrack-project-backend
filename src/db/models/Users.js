@@ -24,10 +24,10 @@ const UsersSchema = new Schema(
       type: Number,
     },
     timeSports: {
-      type: String,
+      type: Number,
     },
     waterRate: {
-      type: String,
+      type: Number,
     },
     gender: {
       type: String,
