@@ -1,0 +1,8 @@
+type: object
+properties:
+  date:
+    type: string
+    example: '2023-08-10'
+  waterVolume:
+    type: number
+    example: 750

@@ -1,0 +1,18 @@
+tags:
+  - Water
+summary: Create a new water record
+operationId: createNewWater
+description: 'Create a new water record for a user'
+security:
+  - bearerAuth: []
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        $ref: '../../components/schemas/water.yaml'
+responses:
+  '201':
+    $ref: '../../components/responses/waterResponse.yaml'
+  '401':
+    $ref: '../../components/responses/401.yaml'

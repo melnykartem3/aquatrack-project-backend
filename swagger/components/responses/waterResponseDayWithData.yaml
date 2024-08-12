@@ -1,0 +1,8 @@
+value:
+  status: 200
+  message: Success find water per day
+  data:
+    - time: '08:00'
+      waterVolume: 500
+    - time: '12:00'
+      waterVolume: 700

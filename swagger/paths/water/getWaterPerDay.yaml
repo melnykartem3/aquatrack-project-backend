@@ -1,0 +1,29 @@
+tags:
+  - Water
+summary: Get water data per day
+operationId: getWaterPerDay
+description: 'Get water data per day with this endpoint'
+security:
+  - bearerAuth: []
+parameters:
+  - in: query
+    name: day
+    required: true
+    schema:
+      type: string
+      example: '610c5d71f7980a001c4d18c6'
+    description: 'The ID of the water record to delete'
+responses:
+  '200':
+    description: Success
+    content:
+      application/json:
+        examples:
+          successWithData:
+            $ref: '../../components/responses/waterResponseDayWithData.yaml'
+          noData:
+            $ref: '../../components/responses/waterResponseDayNoData.yaml'
+  '401':
+    $ref: '../../components/responses/401.yaml'
+  '500':
+    $ref: '../../components/responses/500.yaml'

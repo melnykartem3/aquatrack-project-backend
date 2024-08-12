@@ -1,0 +1,44 @@
+tags:
+  - Auth
+summary: Confirm Google authentication
+operationId: confirmGoogleAuth
+description: Authenticate user via Google OAuth2
+security:
+  - bearerAuth: []
+requestBody:
+  content:
+    application/json:
+      schema:
+        $ref: ..\..\components\schemas\userGoogleAuthCode.yaml
+  required: true
+responses:
+  '200':
+    description: User authenticated successfully via Google
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: User authenticated successfully via Google
+            data:
+              type: object
+              required:
+                - accessToken
+              properties:
+                accessToken:
+                  description: New access token
+                  type: string
+                  example: wWfrg/qp7c/CqF6+9KZt2LgZXab/Gw9Z7yCTV/vW
+  '401':
+    $ref: ../../components/responses/401.yaml
+  '500':
+    $ref: ../../components/responses/500.yaml
