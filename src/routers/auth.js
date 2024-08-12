@@ -12,6 +12,8 @@ import {
   requestResetEmailController,
   resetPasswordController,
   findAllUsersController,
+  getGoogleOAuthUrlController,
+  authGoogleController,
 } from '../controllers/auth.js';
 import upload from '../middlewares/multer.js';
 import { isValidId } from '../validation/isValidId.js';
@@ -20,6 +22,8 @@ import {
   requestResetEmailSchema,
   resetPasswordSchema,
   updateUserSchema,
+  userGoogleAuthCodeSchema,
+
 } from '../validation/user.js';
 import { authenticate } from '../middlewares/authenticate.js';
 
@@ -56,6 +60,14 @@ authRouter.post(
   validateBody(requestResetEmailSchema),
   ctrlWrapper(requestResetEmailController),
 );
+
+authRouter.get(
+  "/get-oauth-url",
+  ctrlWrapper(getGoogleOAuthUrlController));
+authRouter.post(
+  "/confirm-google-auth",
+  validateBody(userGoogleAuthCodeSchema),
+  ctrlWrapper(authGoogleController));
 
 authRouter.post(
   '/reset-password',
