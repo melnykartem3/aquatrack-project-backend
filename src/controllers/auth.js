@@ -6,6 +6,8 @@ import {
   findSession,
 } from '../services/session.js';
 import env from '../utils/env.js';
+import { randomBytes } from "node:crypto";
+import { generateAuthUlr, validateGoogleAuthCode, getGoogleOAuthName } from "../utils/gogleOAuth2.js";
 import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 import { saveFileToPublicDir } from '../utils/saveFileToPublicDir.js';
 import { userService } from '../services/auth.js';
@@ -209,5 +211,49 @@ export const findAllUsersController = async (req, res) => {
     status: 200,
     message: 'Successfully found number of users',
     data: userCount,
+  });
+};
+
+export const getGoogleOAuthUrlController = async (req, res) => {
+  const url = generateAuthUlr();
+  res.json({
+    status: 200,
+    message: 'Google OAuth generate successfully',
+    data: {
+      url
+    }
+  });
+
+};
+export const authGoogleController = async (req, res) => {
+  const { code } = req.body;
+  const ticket = await validateGoogleAuthCode(code);
+  const userPayload = ticket.getPayload();
+
+  if (!userPayload) {
+    throw createHttpError(401);
+  }
+
+  let user = await findUser({ email: userPayload.email });
+  if (!user) {
+    const signupData = {
+      email: userPayload.email,
+      password: randomBytes(10),
+      name: getGoogleOAuthName(userPayload),
+    };
+
+    user = await signup(signupData);
+  }
+
+  const session = await createSession(user._id);
+
+  setupResponseSession(res, session);
+
+  res.json({
+    status: 200,
+    message: "User signin successfully",
+    data: {
+      accessToken: session.accessToken,
+    }
   });
 };
