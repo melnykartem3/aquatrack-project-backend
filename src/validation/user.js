@@ -19,7 +19,8 @@ const resetPasswordSchema = joi.object({
   password: joi.string().required(),
   token: joi.string().required(),
 });
-export const updateUserSchema = joi.object({
+
+const updateUserSchema = joi.object({
   name: joi.string(),
   email: joi.string().pattern(emailRegexp),
   weight: joi.number(),
@@ -29,4 +30,8 @@ export const updateUserSchema = joi.object({
   avatar: joi.string(),
 });
 
-export { userSchema, requestResetEmailSchema, resetPasswordSchema };
+
+const userGoogleAuthCodeSchema = joi.object({
+  code: joi.string().required()
+});
+export { userSchema, requestResetEmailSchema, resetPasswordSchema, userGoogleAuthCodeSchema, updateUserSchema };
