@@ -6,8 +6,12 @@ import {
   findSession,
 } from '../services/session.js';
 import env from '../utils/env.js';
-import { randomBytes } from "node:crypto";
-import { generateAuthUlr, validateGoogleAuthCode, getGoogleOAuthName } from "../utils/gogleOAuth2.js";
+import { randomBytes } from 'node:crypto';
+import {
+  generateAuthUlr,
+  validateGoogleAuthCode,
+  getGoogleOAuthName,
+} from '../utils/gogleOAuth2.js';
 import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 import { saveFileToPublicDir } from '../utils/saveFileToPublicDir.js';
 import { userService } from '../services/auth.js';
@@ -99,16 +103,23 @@ export const updateUserController = async (req, res) => {
   let photo = '';
 
   if (req.file) {
-    if (enable_cloudinary === 'true') {
-      photo = await saveFileToCloudinary(req.file, 'photos');
-    } else {
-      photo = await saveFileToPublicDir(req.file, 'photos');
+    try {
+      if (enable_cloudinary === 'true') {
+        photo = await saveFileToCloudinary(req.file, 'photos');
+      } else {
+        photo = await saveFileToPublicDir(req.file, 'photos');
+      }
+    } catch (error) {
+      throw createHttpError(500, 'Error uploading photo');
     }
   }
 
   const updatedUser = await userService.updateUser(
     { _id: userId },
-    { ...req.body, avatar:photo },
+    {
+      ...req.body,
+      $push: { avatar: photo },
+    },
   );
 
   if (!updatedUser) {
@@ -220,10 +231,9 @@ export const getGoogleOAuthUrlController = async (req, res) => {
     status: 200,
     message: 'Google OAuth generate successfully',
     data: {
-      url
-    }
+      url,
+    },
   });
-
 };
 export const authGoogleController = async (req, res) => {
   const { code } = req.body;
@@ -251,9 +261,9 @@ export const authGoogleController = async (req, res) => {
 
   res.json({
     status: 200,
-    message: "User signin successfully",
+    message: 'User signin successfully',
     data: {
       accessToken: session.accessToken,
-    }
+    },
   });
 };
