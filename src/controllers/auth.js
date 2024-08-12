@@ -106,7 +106,7 @@ export const updateUserController = async (req, res) => {
 
   const updatedUser = await userService.updateUser(
     { _id: userId },
-    { ...req.body, photo },
+    { ...req.body, avatar:photo },
   );
 
   if (!updatedUser) {
