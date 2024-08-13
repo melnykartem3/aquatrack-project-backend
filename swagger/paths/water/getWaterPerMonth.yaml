@@ -1,0 +1,29 @@
+tags:
+  - Water
+summary: Get water records for a specific month
+operationId: getWaterPerMonth
+description: 'Get water records for a specific month with this endpoint'
+security:
+  - bearerAuth: []
+parameters:
+  - in: query
+    name: month
+    required: true
+    schema:
+      type: string
+      example: '2023-08'
+    description: 'The month for which to retrieve water records'
+responses:
+  '200':
+    description: Success
+    content:
+      application/json:
+        examples:
+          successWithData:
+            $ref: ..\..\components\responses\waterResponseWithData.yaml
+          noData:
+            $ref: ..\..\components\responses\waterResponseNoData.yaml
+  '401':
+    $ref: '../../components/responses/401.yaml'
+  '500':
+    $ref: '../../components/responses/500.yaml'

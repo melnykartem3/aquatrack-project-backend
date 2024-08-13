@@ -1,0 +1,8 @@
+value:
+  status: 200
+  message: Success find water per month
+  data:
+    - day: '2024-08-01'
+      totalWaterVolume: 2000
+    - day: '2024-08-02'
+      totalWaterVolume: 1800

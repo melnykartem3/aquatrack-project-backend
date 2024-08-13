@@ -6,7 +6,15 @@ import {
   findSession,
 } from '../services/session.js';
 import env from '../utils/env.js';
-import { generateAuthUlr, validateGoogleAuthCode, getGoogleOAuthName } from "../utils/gogleOAuth2.js";
+
+
+import { randomBytes } from 'node:crypto';
+import {
+  generateAuthUlr,
+  validateGoogleAuthCode,
+  getGoogleOAuthName,
+} from '../utils/gogleOAuth2.js';
+
 import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 import { saveFileToPublicDir } from '../utils/saveFileToPublicDir.js';
 import { userService } from '../services/auth.js';
@@ -98,16 +106,23 @@ export const updateUserController = async (req, res) => {
   let photo = '';
 
   if (req.file) {
-    if (enable_cloudinary === 'true') {
-      photo = await saveFileToCloudinary(req.file, 'photos');
-    } else {
-      photo = await saveFileToPublicDir(req.file, 'photos');
+    try {
+      if (enable_cloudinary === 'true') {
+        photo = await saveFileToCloudinary(req.file, 'photos');
+      } else {
+        photo = await saveFileToPublicDir(req.file, 'photos');
+      }
+    } catch (error) {
+      throw createHttpError(500, 'Error uploading photo');
     }
   }
 
   const updatedUser = await userService.updateUser(
     { _id: userId },
-    { ...req.body, photo },
+    {
+      ...req.body,
+      avatar: photo,
+    },
   );
 
   if (!updatedUser) {
@@ -216,13 +231,14 @@ export const findAllUsersController = async (req, res) => {
 export const getGoogleOAuthUrlController = async (req, res) => {
   const url = generateAuthUlr();
   res.json({
+
       status: 200,
       message: 'Google OAuth generate successfully',
       data: {
           url
       }
-  });
 
+  });
 };
 
 
@@ -267,6 +283,7 @@ export const registerGoogleController = async (req, res) => {
 
     let user = await findUser({ email });
 
+
     if (!user) {
       user = await signup({ email, name, password: 'google-auth' });
     }
@@ -282,4 +299,5 @@ export const registerGoogleController = async (req, res) => {
     console.error('Google Registration Error:', error);
     res.status(401).json({ message: 'Invalid grant', data: error.message });
   }
+
 };

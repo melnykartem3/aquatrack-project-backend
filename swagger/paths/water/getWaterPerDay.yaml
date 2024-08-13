@@ -1,0 +1,30 @@
+tags:
+  - Water
+summary: Get water data per day
+operationId: getWaterPerDay
+description: 'Retrieve water data for a specific day'
+security:
+  - bearerAuth: []
+parameters:
+  - in: query
+    name: day
+    required: true
+    schema:
+      type: string
+      format: date
+      example: '2024-08-13'
+    description: 'The date in YYYY-MM-DD format'
+responses:
+  '200':
+    description: Success
+    content:
+      application/json:
+        examples:
+          successWithData:
+            $ref: '../../components/responses/waterResponseDayWithData.yaml'
+          noData:
+            $ref: '../../components/responses/waterResponseDayNoData.yaml'
+  '401':
+    $ref: '../../components/responses/401.yaml'
+  '500':
+    $ref: '../../components/responses/500.yaml'

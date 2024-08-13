@@ -22,6 +22,7 @@ import {
   userSchema,
   requestResetEmailSchema,
   resetPasswordSchema,
+  updateUserSchema,
   userGoogleAuthCodeSchema,
 } from '../validation/user.js';
 import { authenticate } from '../middlewares/authenticate.js';
@@ -44,9 +45,9 @@ authRouter.get('/current', authenticate, ctrlWrapper(getUserController));
 
 authRouter.patch(
   '/update/:userId',
-  upload.single('photo'),
+  upload.single('avatar'),
   isValidId,
-  validateBody(userSchema),
+  validateBody(updateUserSchema),
   ctrlWrapper(updateUserController),
 );
 
@@ -60,13 +61,12 @@ authRouter.post(
   ctrlWrapper(requestResetEmailController),
 );
 
-authRouter.get(
-  "/get-oauth-url",
-  ctrlWrapper(getGoogleOAuthUrlController));
+authRouter.get('/get-oauth-url', ctrlWrapper(getGoogleOAuthUrlController));
 authRouter.post(
-  "/confirm-google-auth",
+  '/confirm-google-auth',
   validateBody(userGoogleAuthCodeSchema),
-  ctrlWrapper(authGoogleController));
+  ctrlWrapper(authGoogleController),
+);
 
   authRouter.post(
     "/register-google",
@@ -81,6 +81,5 @@ authRouter.post(
 );
 
 authRouter.get('/users', ctrlWrapper(findAllUsersController));
-
 
 export default authRouter;
