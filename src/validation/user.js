@@ -32,6 +32,6 @@ const updateUserSchema = joi.object({
 
 
 const userGoogleAuthCodeSchema = joi.object({
-  code: joi.string().required()
+  idToken: joi.string().required()
 });
 export { userSchema, requestResetEmailSchema, resetPasswordSchema, userGoogleAuthCodeSchema, updateUserSchema };
