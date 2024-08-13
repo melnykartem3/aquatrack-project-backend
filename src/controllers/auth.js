@@ -7,7 +7,6 @@ import {
 } from '../services/session.js';
 import env from '../utils/env.js';
 
-
 import { randomBytes } from 'node:crypto';
 import {
   generateAuthUlr,
@@ -231,42 +230,35 @@ export const findAllUsersController = async (req, res) => {
 export const getGoogleOAuthUrlController = async (req, res) => {
   const url = generateAuthUlr();
   res.json({
-
-      status: 200,
-      message: 'Google OAuth generate successfully',
-      data: {
-          url
-      }
-
+    status: 200,
+    message: 'Google OAuth generate successfully',
+    data: {
+      url,
+    },
   });
 };
 
-
 export const authGoogleController = async (req, res) => {
-const { idToken } = req.body;
-const JWT_SECRET = process.env.JWT_SECRET;
-if (!idToken) {
-  return res.status(400).json({ message: 'Token is required' });
-}
+  const { idToken } = req.body;
+  const JWT_SECRET = process.env.JWT_SECRET;
+  if (!idToken) {
+    return res.status(400).json({ message: 'Token is required' });
+  }
 
-try {
-  const payload = await validateGoogleAuthCode(idToken);
+  try {
+    const payload = await validateGoogleAuthCode(idToken);
 
-  const { email, given_name, family_name } = payload;
-  const name = getGoogleOAuthName({ given_name, family_name });
+    const { email, given_name, family_name } = payload;
+    const name = getGoogleOAuthName({ given_name, family_name });
 
+    const accessToken = jwt.sign({ email, name }, JWT_SECRET, {
+      expiresIn: '1h',
+    });
 
-  const accessToken = jwt.sign(
-    { email, name },
-   JWT_SECRET,
-    { expiresIn: '1h' }
-  );
-
-  res.json({ data: { accessToken, user: { email, name } } });
-} catch (error) {
-  console.error('Google Auth Error:', error);
-  res.status(401).json({ message: 'Invalid grant', data: error.message });
-}
+    res.json({ data: { accessToken, user: { email, name } } });
+  } catch (error) {
+    res.status(401).json({ message: 'Invalid grant', data: error.message });
+  }
 };
 export const registerGoogleController = async (req, res) => {
   const { idToken } = req.body;
@@ -283,7 +275,6 @@ export const registerGoogleController = async (req, res) => {
 
     let user = await findUser({ email });
 
-
     if (!user) {
       user = await signup({ email, name, password: 'google-auth' });
     }
@@ -291,13 +282,13 @@ export const registerGoogleController = async (req, res) => {
     const accessToken = jwt.sign(
       { email: user.email, name: user.name },
       JWT_SECRET,
-      { expiresIn: '1h' }
+      { expiresIn: '1h' },
     );
 
-    res.json({ data: { accessToken, user: { email: user.email, name: user.name } } });
+    res.json({
+      data: { accessToken, user: { email: user.email, name: user.name } },
+    });
   } catch (error) {
-    console.error('Google Registration Error:', error);
     res.status(401).json({ message: 'Invalid grant', data: error.message });
   }
-
 };
