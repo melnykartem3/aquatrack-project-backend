@@ -43,7 +43,7 @@
         ],
         "requestBody": {
           "content": {
-            "multipart/form-data": {
+            "application/json": {
               "schema": {
                 "type": "object",
                 "required": [
@@ -51,45 +51,15 @@
                   "password"
                 ],
                 "properties": {
-                  "name": {
-                    "description": "User's name",
+                  "email": {
+                    "description": "User's email address",
                     "type": "string",
-                    "example": "John Doe",
-                    "default": "User"
+                    "example": "john.doe@example.com"
                   },
                   "password": {
-                    "description": "Hashed user's password",
+                    "description": "User's password",
                     "type": "string",
-                    "example": "$2b$10$v.fenpNLVl2nfbHGoU504edTH6dsljkjhSk7BrtE7mdbrBeWZdP0W"
-                  },
-                  "weight": {
-                    "description": "User's weight in kilograms",
-                    "type": "number",
-                    "example": 65
-                  },
-                  "timeSports": {
-                    "description": "How much the user does sports",
-                    "type": "number",
-                    "example": 4
-                  },
-                  "waterRate": {
-                    "description": "How much user drinks water",
-                    "type": "number",
-                    "example": 2
-                  },
-                  "gender": {
-                    "description": "User's gender",
-                    "type": "string",
-                    "enum": [
-                      "woman",
-                      "man"
-                    ],
-                    "default": "man"
-                  },
-                  "avatar": {
-                    "description": "User's photo",
-                    "type": "string",
-                    "example": "<https://res.cloudinary.com/fvnje/image/upload/image.png>"
+                    "example": "password123"
                   }
                 }
               }
@@ -119,20 +89,28 @@
                     },
                     "data": {
                       "type": "object",
-                      "$ref": "#/components/schemas/user"
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "example": "John Doe"
+                        },
+                        "email": {
+                          "type": "string",
+                          "example": "john.doe@example.com"
+                        }
+                      }
                     }
                   }
                 }
               }
             }
           },
-          "404": {
-            "$ref": "#/components/responses/404"
-          },
           "409": {
+            "description": "Email already in use",
             "$ref": "#/components/responses/409"
           },
           "500": {
+            "description": "Internal server error",
             "$ref": "#/components/responses/500"
           }
         }
@@ -153,7 +131,7 @@
         ],
         "requestBody": {
           "content": {
-            "multipart/form-data": {
+            "application/json": {
               "schema": {
                 "type": "object",
                 "required": [
@@ -167,9 +145,9 @@
                     "example": "example@ukr.net"
                   },
                   "password": {
-                    "description": "Hashed user's password",
+                    "description": "User's password",
                     "type": "string",
-                    "example": "$2b$10$v.fenpNLVl2nfbHGoU504edTH6dsljkjhSk7BrtE7mdbrBeWZdP0W"
+                    "example": "password123"
                   }
                 }
               }
@@ -179,6 +157,15 @@
         "responses": {
           "200": {
             "description": "User successfully logged in",
+            "headers": {
+              "Set-Cookie": {
+                "description": "Cookies with session details",
+                "schema": {
+                  "type": "string",
+                  "example": "refreshToken=...; sessionId=...;"
+                }
+              }
+            },
             "content": {
               "application/json": {
                 "schema": {
@@ -199,14 +186,11 @@
                     },
                     "data": {
                       "type": "object",
-                      "required": [
-                        "message"
-                      ],
                       "properties": {
-                        "message": {
-                          "description": "response",
+                        "accessToken": {
+                          "description": "Access token for the user",
                           "type": "string",
-                          "example": "Successfully logged in!"
+                          "example": "base64encodedaccesstoken"
                         }
                       }
                     }
@@ -528,9 +512,9 @@
         "tags": [
           "Auth"
         ],
-        "summary": "Get all users",
-        "operationId": "getAllUsers",
-        "description": "Retrieve a list of all users",
+        "summary": "Get the number of users",
+        "operationId": "getUserCount",
+        "description": "Retrieve the total number of users",
         "security": [
           {
             "bearerAuth": []
@@ -538,7 +522,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successfully retrieved the list of users",
+            "description": "Successfully retrieved the number of users",
             "content": {
               "application/json": {
                 "schema": {
@@ -555,27 +539,11 @@
                     },
                     "message": {
                       "type": "string",
-                      "example": "Successfully retrieved users"
+                      "example": "Successfully retrieved the number of users"
                     },
                     "data": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string",
-                            "example": 12345
-                          },
-                          "name": {
-                            "type": "string",
-                            "example": "John Doe"
-                          },
-                          "email": {
-                            "type": "string",
-                            "example": "john.doe@example.com"
-                          }
-                        }
-                      }
+                      "type": "integer",
+                      "example": 10
                     }
                   }
                 }
@@ -1068,141 +1036,6 @@
         "scheme": "bearer"
       }
     },
-    "schemas": {
-      "user": {
-        "type": "object",
-        "required": [
-          "_id",
-          "name",
-          "email",
-          "password",
-          "weight",
-          "timeSports",
-          "waterRate",
-          "gender",
-          "avatar"
-        ],
-        "properties": {
-          "_id": {
-            "description": "User's id",
-            "type": "string",
-            "example": "65e4decdd286b30065d54af9"
-          },
-          "name": {
-            "description": "User's name",
-            "type": "string",
-            "example": "John Doe",
-            "default": "User"
-          },
-          "password": {
-            "description": "Hashed user's password",
-            "type": "string",
-            "example": "$2b$10$v.fenpNLVl2nfbHGoU504edTH6dsljkjhSk7BrtE7mdbrBeWZdP0W"
-          },
-          "weight": {
-            "description": "User's weight in kilograms",
-            "type": "number",
-            "example": 65
-          },
-          "timeSports": {
-            "description": "How much the user does sports",
-            "type": "number",
-            "example": 4
-          },
-          "waterRate": {
-            "description": "User's goal to drink water",
-            "type": "number",
-            "example": 2
-          },
-          "gender": {
-            "description": "User's gender",
-            "type": "string",
-            "enum": [
-              "woman",
-              "man"
-            ],
-            "default": "man"
-          },
-          "avatar": {
-            "description": "User's photo",
-            "type": "string",
-            "example": "<https://res.cloudinary.com/fvnje/image/upload/image.png>"
-          }
-        }
-      },
-      "requestResetEmail": {
-        "type": "object",
-        "required": [
-          "email"
-        ],
-        "properties": {
-          "email": {
-            "type": "string",
-            "format": "email",
-            "example": "john.doe@example.com"
-          }
-        }
-      },
-      "resetPassword": {
-        "type": "object",
-        "required": [
-          "token",
-          "newPassword"
-        ],
-        "properties": {
-          "token": {
-            "type": "string",
-            "example": "5a3c67e7ae7f10c88b598384"
-          },
-          "newPassword": {
-            "type": "string",
-            "example": "NewSecurePassword123"
-          }
-        }
-      },
-      "userGoogleAuthCode": {
-        "type": "object",
-        "required": [
-          "code"
-        ],
-        "properties": {
-          "code": {
-            "type": "string",
-            "example": "4/0AdQt8qgIH8F2l9d7-MT7-IeM2AVyTZySwV7Zdc8s_cudhb8Pdr-U_YiDgkj"
-          }
-        }
-      },
-      "water": {
-        "type": "object",
-        "properties": {
-          "date": {
-            "type": "string",
-            "example": "2023-08-10"
-          },
-          "waterVolume": {
-            "type": "number",
-            "example": 500
-          },
-          "userId": {
-            "type": "string",
-            "example": "60d21b4667d0d8992e610c85"
-          }
-        }
-      },
-      "waterUpdate": {
-        "type": "object",
-        "properties": {
-          "date": {
-            "type": "string",
-            "example": "2023-08-10"
-          },
-          "waterVolume": {
-            "type": "number",
-            "example": 750
-          }
-        }
-      }
-    },
     "responses": {
       "401": {
         "description": "Unauthorized error",
@@ -1396,6 +1229,141 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "user": {
+        "type": "object",
+        "required": [
+          "_id",
+          "name",
+          "email",
+          "password",
+          "weight",
+          "timeSports",
+          "waterRate",
+          "gender",
+          "avatar"
+        ],
+        "properties": {
+          "_id": {
+            "description": "User's id",
+            "type": "string",
+            "example": "65e4decdd286b30065d54af9"
+          },
+          "name": {
+            "description": "User's name",
+            "type": "string",
+            "example": "John Doe",
+            "default": "User"
+          },
+          "password": {
+            "description": "Hashed user's password",
+            "type": "string",
+            "example": "$2b$10$v.fenpNLVl2nfbHGoU504edTH6dsljkjhSk7BrtE7mdbrBeWZdP0W"
+          },
+          "weight": {
+            "description": "User's weight in kilograms",
+            "type": "number",
+            "example": 65
+          },
+          "timeSports": {
+            "description": "How much the user does sports",
+            "type": "number",
+            "example": 4
+          },
+          "waterRate": {
+            "description": "User's goal to drink water",
+            "type": "number",
+            "example": 2
+          },
+          "gender": {
+            "description": "User's gender",
+            "type": "string",
+            "enum": [
+              "woman",
+              "man"
+            ],
+            "default": "man"
+          },
+          "avatar": {
+            "description": "User's photo",
+            "type": "string",
+            "example": "<https://res.cloudinary.com/fvnje/image/upload/image.png>"
+          }
+        }
+      },
+      "requestResetEmail": {
+        "type": "object",
+        "required": [
+          "email"
+        ],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "john.doe@example.com"
+          }
+        }
+      },
+      "resetPassword": {
+        "type": "object",
+        "required": [
+          "token",
+          "newPassword"
+        ],
+        "properties": {
+          "token": {
+            "type": "string",
+            "example": "5a3c67e7ae7f10c88b598384"
+          },
+          "newPassword": {
+            "type": "string",
+            "example": "NewSecurePassword123"
+          }
+        }
+      },
+      "userGoogleAuthCode": {
+        "type": "object",
+        "required": [
+          "code"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "example": "4/0AdQt8qgIH8F2l9d7-MT7-IeM2AVyTZySwV7Zdc8s_cudhb8Pdr-U_YiDgkj"
+          }
+        }
+      },
+      "water": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "example": "2023-08-10"
+          },
+          "waterVolume": {
+            "type": "number",
+            "example": 500
+          },
+          "userId": {
+            "type": "string",
+            "example": "60d21b4667d0d8992e610c85"
+          }
+        }
+      },
+      "waterUpdate": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "example": "2023-08-10"
+          },
+          "waterVolume": {
+            "type": "number",
+            "example": 750
           }
         }
       }

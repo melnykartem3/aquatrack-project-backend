@@ -1,13 +1,13 @@
 tags:
   - Auth
-summary: Get all users
-operationId: getAllUsers
-description: Retrieve a list of all users
+summary: Get the number of users
+operationId: getUserCount
+description: Retrieve the total number of users
 security:
   - bearerAuth: []
 responses:
   '200':
-    description: Successfully retrieved the list of users
+    description: Successfully retrieved the number of users
     content:
       application/json:
         schema:
@@ -22,21 +22,10 @@ responses:
               example: 200
             message:
               type: string
-              example: Successfully retrieved users
+              example: Successfully retrieved the number of users
             data:
-              type: array
-              items:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    example: 12345
-                  name:
-                    type: string
-                    example: John Doe
-                  email:
-                    type: string
-                    example: john.doe@example.com
+              type: integer
+              example: 10
   '401':
     $ref: ../../components/responses/401.yaml
   '500':

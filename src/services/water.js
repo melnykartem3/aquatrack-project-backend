@@ -1,10 +1,7 @@
 import WaterCollection from '../db/models/Water.js';
 import mongoose from 'mongoose';
-// export const getWaterById = (waterId)=> WaterCollection.findById(waterId);
 
 export const createWater = (data) => WaterCollection.create(data);
-
-// export const deleteWater = (filter) => WaterCollection.findOneAndDelete(filter);
 
 export const deleteWaterIdService = async (waterId, userId) => {
   const waterData = await WaterCollection.findByIdAndDelete({

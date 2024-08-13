@@ -1,49 +1,27 @@
 tags:
   - Auth
-summary:  Register a user
+summary: Register a user
 operationId: signupUser
 description: 'Add a user'
 security:
   - bearerAuth: []
 requestBody:
   content:
-    multipart/form-data:
+    application/json:
       schema:
         type: object
         required:
           - email
           - password
         properties:
-          name:
-            description: "User's name"
+          email:
+            description: "User's email address"
             type: string
-            example: 'John Doe'
-            default: "User"
+            example: 'john.doe@example.com'
           password:
-            description: "Hashed user's password"
+            description: "User's password"
             type: string
-            example: $2b$10$v.fenpNLVl2nfbHGoU504edTH6dsljkjhSk7BrtE7mdbrBeWZdP0W
-          weight:
-            description: "User's weight in kilograms"
-            type: number
-            example: 65
-          timeSports:
-            description: "How much the user does sports"
-            type: number
-            example: 4
-          waterRate:
-            description: "How much user drinks water"
-            type: number
-            example: 2
-          gender:
-            description: "User's gender"
-            type: string
-            enum: ["woman","man"]
-            default: "man"
-          avatar:
-            description: "User's photo"
-            type: string
-            example: <https://res.cloudinary.com/fvnje/image/upload/image.png>
+            example: 'password123'
 responses:
   '201':
     description: 'Successfully registered a user!'
@@ -64,10 +42,16 @@ responses:
               example: Successfully registered a user!
             data:
               type: object
-              $ref: ../../components/schemas/user.yaml
-  '404':
-    $ref: ../../components/responses/404.yaml
+              properties:
+                name:
+                  type: string
+                  example: 'John Doe'
+                email:
+                  type: string
+                  example: 'john.doe@example.com'
   '409':
+    description: 'Email already in use'
     $ref: ../../components/responses/409.yaml
   '500':
+    description: 'Internal server error'
     $ref: ../../components/responses/500.yaml

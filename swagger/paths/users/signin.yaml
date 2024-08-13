@@ -1,13 +1,13 @@
 tags:
   - Auth
-summary:  Login a user
+summary: Login a user
 operationId: signinUser
 description: 'Login a user'
 security:
   - bearerAuth: []
 requestBody:
   content:
-    multipart/form-data:
+    application/json:
       schema:
         type: object
         required:
@@ -19,12 +19,18 @@ requestBody:
             type: string
             example: example@ukr.net
           password:
-            description: "Hashed user's password"
+            description: "User's password"
             type: string
-            example: $2b$10$v.fenpNLVl2nfbHGoU504edTH6dsljkjhSk7BrtE7mdbrBeWZdP0W
+            example: 'password123'
 responses:
   '200':
     description: 'User successfully logged in'
+    headers:
+      Set-Cookie:
+        description: Cookies with session details
+        schema:
+          type: string
+          example: 'refreshToken=...; sessionId=...;'
     content:
       application/json:
         schema:
@@ -39,19 +45,18 @@ responses:
               example: 200
             message:
               type: string
-              example:  User successfully logged in
+              example: 'User successfully logged in'
             data:
               type: object
-              required:
-                - message
               properties:
-                message:
-                  description: "response"
+                accessToken:
+                  description: 'Access token for the user'
                   type: string
-                  example: Successfully logged in!
+                  example: 'base64encodedaccesstoken'
+
   '404':
-    $ref: "../../components/responses/404.yaml"
+    $ref: '../../components/responses/404.yaml'
   '401':
-    $ref: "../../components/responses/401.yaml"
+    $ref: '../../components/responses/401.yaml'
   '500':
     $ref: ../../components/responses/500.yaml
