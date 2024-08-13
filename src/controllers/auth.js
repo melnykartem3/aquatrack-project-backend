@@ -118,7 +118,7 @@ export const updateUserController = async (req, res) => {
     { _id: userId },
     {
       ...req.body,
-      $push: { avatar: photo },
+      avatar: photo,
     },
   );
 
