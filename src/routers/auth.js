@@ -14,6 +14,7 @@ import {
   findAllUsersController,
   getGoogleOAuthUrlController,
   authGoogleController,
+  registerGoogleController,
 } from '../controllers/auth.js';
 import upload from '../middlewares/multer.js';
 import { isValidId } from '../validation/isValidId.js';
@@ -66,6 +67,12 @@ authRouter.post(
   "/confirm-google-auth",
   validateBody(userGoogleAuthCodeSchema),
   ctrlWrapper(authGoogleController));
+
+  authRouter.post(
+    "/register-google",
+    validateBody(userGoogleAuthCodeSchema),
+     ctrlWrapper(registerGoogleController));
+
 
 authRouter.post(
   '/reset-password',
