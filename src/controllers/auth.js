@@ -1,5 +1,4 @@
 import createHttpError from 'http-errors';
-import jwt from 'jsonwebtoken';
 import {
   createSession,
   deleteSession,
@@ -7,16 +6,14 @@ import {
 } from '../services/session.js';
 import env from '../utils/env.js';
 
-import { randomBytes } from 'node:crypto';
 import {
   generateAuthUrl,
-  validateGoogleAuthCode,
-  getGoogleOAuthName,
+
 } from '../utils/gogleOAuth2.js';
 
 import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 import { saveFileToPublicDir } from '../utils/saveFileToPublicDir.js';
-import { userService } from '../services/auth.js';
+import { activateUser, loginOrSignupWithGoogle, userService } from '../services/auth.js';
 
 import {
   signup,
@@ -26,6 +23,7 @@ import {
   findAllUsers,
 } from '../services/auth.js';
 import { compareValue } from '../utils/hash.js';
+import { addCookies } from '../utils/addCookies.js';
 
 export const signUpController = async (req, res) => {
   const { email } = req.body;
@@ -230,87 +228,39 @@ export const findAllUsersController = async (req, res) => {
 export const getGoogleOAuthUrlController = async (req, res) => {
   const url = generateAuthUrl();
   res.json({
-      status: 200,
-      message: 'Google OAuth generate successfully',
-      data: {
-          url
-      }
+    status: 200,
+    message: 'Successfully get Google OAuth url!',
+    data: {
+      url,
+    },
   });
-
 };
 
+export const loginWithGoogleController = async (req, res) => {
+  const session = await loginOrSignupWithGoogle(req.body.code);
+  const { accessToken } = session;
 
-export const authGoogleController = async (req, res) => {
-const { idToken } = req.body;
-const JWT_SECRET = process.env.JWT_SECRET;
-if (!idToken) {
-  return res.status(400).json({ message: 'Token is required' });
-}
+  addCookies(res, session);
 
-try {
-  // Перевірка idToken
-  const payload = await validateGoogleAuthCode(idToken);
-
-  // Отримання даних користувача
-  const { email, given_name, family_name } = payload;
-  const name = getGoogleOAuthName({ given_name, family_name });
-
-  // Генерація JWT
-  const accessToken = jwt.sign(
-    { email, name },
-   JWT_SECRET,
-    { expiresIn: '1h' } // Термін дії токену
-  );
-
-  res.json({ data: { accessToken, user: { email, name } } });
-} catch (error) {
-  console.error('Google Auth Error:', error);
-  res.status(401).json({ message: 'Invalid grant', data: error.message });
-}
-};
-export const registerGoogleController = async (req, res) => {
-const { idToken } = req.body;
-const JWT_SECRET = process.env.JWT_SECRET;
-
-if (!idToken) {
-  return res.status(400).json({ message: 'Token is required' });
-}
-
-try {
-  // Перевірка idToken
-  const payload = await validateGoogleAuthCode(idToken);
-  const { email, given_name, family_name } = payload;
-  const name = getGoogleOAuthName({ given_name, family_name });
-
-  // Перевірка, чи існує користувач
-  let user = await findUser({ email });
-
-  if (!user) {
-    // Якщо користувач не існує, реєструємо нового користувача
-    user = await signup({ email, name, password: 'google-auth' });
-  }
-
-  // Генерація JWT
-  const accessToken = jwt.sign(
-    { email: user.email, name: user.name },
-    JWT_SECRET,
-    { expiresIn: '1h' }
-  );
-
-  // Відправка результату
   res.json({
     status: 200,
-    message: 'User successfully registered',
-    data: {
-      accessToken,
-      user: {
-        email: user.email,
-        name: user.name
-      }
-    }
+    message: 'Successfully logged in via Google OAuth!',
+    data: { accessToken },
   });
-} catch (error) {
-  console.error('Google Registration Error:', error);
-  res.status(401).json({ message: 'Invalid grant', data: error.message });
-}
+};
+export const activateUserController = async (req, res) => {
+  const {
+    body: { activationToken },
+  } = req;
+
+  const session = await activateUser(activationToken);
+  const { accessToken } = session;
+
+  addCookies(res, session);
+
+  res.json({
+    status: 200,
+    message: 'Successfully activated and logged in a user!',
+    data: { accessToken },
+  });
 };
