@@ -64,7 +64,7 @@ export const requestResetToken = async (email) => {
   const template = handlebars.compile(templateSource);
   const html = template({
     name: user.name,
-    link: `${env('APP_DOMAIN')}/reset-password?token=${resetToken}`,
+    link: `https://aquatrack-project-frontend.vercel.app/reset-password?token=${resetToken}`,
   });
 
   await sendEmail({
@@ -103,4 +103,3 @@ export const resetPassword = async (payload) => {
 };
 
 export const findAllUsers = () => UsersCollection.find();
-
